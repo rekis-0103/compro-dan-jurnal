@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 24, 2025 at 01:30 PM
+-- Generation Time: Apr 01, 2026 at 02:07 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.29
 
@@ -48,7 +48,12 @@ CREATE TABLE `applications` (
 --
 
 INSERT INTO `applications` (`application_id`, `job_id`, `user_id`, `no_telepon`, `id_jenjang_pendidikan`, `id_jurusan_pendidikan`, `cv`, `status`, `reason`, `interview_date`, `start_date`, `applied_at`, `updated_at`) VALUES
-(5, 3, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', 'test123', '2025-11-25 20:24:00', '2025-11-25', '2025-11-24 12:09:31', '2025-11-24 13:25:17');
+(6, 3, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', 'test', '2025-11-11 15:33:00', '2025-11-26', '2025-11-25 07:24:36', '2025-11-25 07:46:09'),
+(7, 3, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'ditolak tes & wawancara', 'gak tau', '2025-12-04 07:55:00', NULL, '2025-11-25 11:55:09', '2025-11-26 00:55:50'),
+(8, 3, 9, '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'lolos administrasi', 'oke kamu diterima di sini yh', NULL, NULL, '2025-11-26 00:47:55', '2025-11-27 11:40:49'),
+(9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', '2025-11-26 01:34:18', '2025-11-26 01:36:35'),
+(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', '2026-02-26 03:09:54', '2026-02-26 03:12:15'),
+(11, 3, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'diterima bekerja', 'testtt', '2026-04-01 14:13:00', '2026-04-02', '2026-03-31 07:09:12', '2026-03-31 07:15:01');
 
 -- --------------------------------------------------------
 
@@ -673,7 +678,120 @@ INSERT INTO `log_aktivitas` (`log_id`, `user_id`, `action`, `log_time`) VALUES
 (426, 3, 'Login', '2025-11-24 13:23:36'),
 (427, 3, 'HRD: terima administrasi application #5 (Divisi IT)', '2025-11-24 13:24:19'),
 (428, 3, 'HRD: set interview application #5', '2025-11-24 13:24:46'),
-(429, 3, 'HRD: terima bekerja application #5 (Divisi IT)', '2025-11-24 13:25:18');
+(429, 3, 'HRD: terima bekerja application #5 (Divisi IT)', '2025-11-24 13:25:18'),
+(430, 3, 'Logout', '2025-11-24 13:42:24'),
+(431, 1, 'Login', '2025-11-24 13:42:31'),
+(432, 2, 'Login', '2025-11-25 07:23:05'),
+(433, 2, 'Kirim lamaran (job #3)', '2025-11-25 07:24:36'),
+(434, 2, 'Logout', '2025-11-25 07:24:47'),
+(435, 3, 'Login', '2025-11-25 07:25:02'),
+(436, 3, 'HRD: terima administrasi application #6 (Divisi IT)', '2025-11-25 07:31:23'),
+(437, 3, 'HRD: set interview application #6', '2025-11-25 07:32:36'),
+(438, 3, 'Logout', '2025-11-25 07:35:02'),
+(439, 1, 'Login', '2025-11-25 07:35:18'),
+(440, 1, 'Logout', '2025-11-25 07:36:51'),
+(441, 4, 'Login', '2025-11-25 07:37:04'),
+(442, 4, 'Logout', '2025-11-25 07:40:34'),
+(443, 3, 'Login', '2025-11-25 07:40:57'),
+(444, 3, 'Logout', '2025-11-25 07:41:06'),
+(445, 1, 'Login', '2025-11-25 07:41:14'),
+(446, 1, 'Logout', '2025-11-25 07:42:50'),
+(447, 3, 'Login', '2025-11-25 07:43:25'),
+(448, 3, 'HRD: terima bekerja application #6 (Divisi IT)', '2025-11-25 07:46:14'),
+(449, 3, 'Logout', '2025-11-25 07:46:18'),
+(450, 1, 'Login', '2025-11-25 07:46:28'),
+(451, 1, 'Logout', '2025-11-25 07:46:45'),
+(452, 3, 'Login', '2025-11-25 07:46:52'),
+(453, 3, 'Logout', '2025-11-25 07:48:29'),
+(454, 1, 'Login', '2025-11-25 07:48:35'),
+(455, 1, 'Login', '2025-11-25 11:36:06'),
+(456, 1, 'Logout', '2025-11-25 11:36:11'),
+(457, 3, 'Login', '2025-11-25 11:36:27'),
+(458, 3, 'Logout', '2025-11-25 11:54:19'),
+(459, 8, 'Login', '2025-11-25 11:54:43'),
+(460, 8, 'Update profil: Jenjang Pendidikan: \'SMK\' → \'S1\', Jurusan: \'Desain Komunikasi Visual\' → \'Teknik Informatika\'', '2025-11-25 11:54:58'),
+(461, 8, 'Kirim lamaran (job #3)', '2025-11-25 11:55:09'),
+(462, 8, 'Logout', '2025-11-25 11:55:17'),
+(463, 3, 'Login', '2025-11-25 11:55:24'),
+(464, 3, 'HRD: terima administrasi application #7 (Divisi IT)', '2025-11-25 12:19:31'),
+(465, 3, 'HRD: terima administrasi application #7 (Divisi IT)', '2025-11-25 12:19:34'),
+(466, NULL, 'membuat User baru', '2025-11-26 00:45:02'),
+(467, 9, 'Login', '2025-11-26 00:45:12'),
+(468, 9, 'Update profil: No. Telepon: \'belum diisi\' → \'0831279132789\', Jenjang Pendidikan: \'belum diisi\' → \'S1\', Jurusan: \'belum diisi\' → \'Teknik Informatika\', CV: Upload CV baru \'cv_9_1764117960.pdf\'', '2025-11-26 00:46:00'),
+(469, 9, 'Kirim lamaran (job #3)', '2025-11-26 00:47:56'),
+(470, 9, 'Logout', '2025-11-26 00:48:10'),
+(471, 3, 'Login', '2025-11-26 00:48:17'),
+(472, 3, 'HRD: tolak administrasi application #8 (Divisi IT)', '2025-11-26 00:51:09'),
+(473, 3, 'HRD: tolak kandidat application #7 (Divisi IT)', '2025-11-26 00:51:46'),
+(474, 3, 'HRD: tolak kandidat application #7 (Divisi IT)', '2025-11-26 00:53:06'),
+(475, 3, 'HRD: set interview application #7', '2025-11-26 00:55:37'),
+(476, 3, 'HRD: tolak setelah interview application #7 (Divisi IT)', '2025-11-26 00:55:55'),
+(477, 3, 'Logout', '2025-11-26 01:07:21'),
+(478, 8, 'Login', '2025-11-26 01:07:29'),
+(479, 8, 'Logout', '2025-11-26 01:31:34'),
+(480, 3, 'Login', '2025-11-26 01:31:53'),
+(481, 3, 'HRD: tambah lowongan #4 - Divisi Software', '2025-11-26 01:33:14'),
+(482, 3, 'Logout', '2025-11-26 01:33:19'),
+(483, 8, 'Login', '2025-11-26 01:33:30'),
+(484, 8, 'Kirim lamaran (job #4)', '2025-11-26 01:34:18'),
+(485, 8, 'Logout', '2025-11-26 01:34:21'),
+(486, 3, 'Login', '2025-11-26 01:34:29'),
+(487, 3, 'HRD: terima administrasi application #9 (Divisi Software)', '2025-11-26 01:34:54'),
+(488, 3, 'HRD: set interview application #9', '2025-11-26 01:35:18'),
+(489, 3, 'Logout', '2025-11-26 01:35:25'),
+(490, 8, 'Login', '2025-11-26 01:35:37'),
+(491, 8, 'Logout', '2025-11-26 01:36:07'),
+(492, 3, 'Login', '2025-11-26 01:36:14'),
+(493, 3, 'HRD: terima bekerja application #9 (Divisi Software)', '2025-11-26 01:36:43'),
+(494, 3, 'Logout', '2025-11-26 01:36:54'),
+(495, 8, 'Login', '2025-11-26 01:37:04'),
+(496, 8, 'Logout', '2025-11-26 01:37:36'),
+(497, 1, 'Login', '2025-11-26 01:37:46'),
+(498, 1, 'Logout', '2025-11-26 03:12:20'),
+(499, 3, 'Login', '2025-11-26 03:12:28'),
+(500, 3, 'Logout', '2025-11-26 03:12:43'),
+(501, 8, 'Login', '2025-11-26 03:12:59'),
+(502, 8, 'Logout', '2025-11-26 03:14:10'),
+(503, 1, 'Login', '2025-11-27 06:12:01'),
+(504, 1, 'Logout', '2025-11-27 07:38:14'),
+(505, 2, 'Login', '2025-11-27 07:41:37'),
+(506, 2, 'Logout', '2025-11-27 07:45:40'),
+(507, 3, 'Login', '2025-11-27 07:45:45'),
+(508, 3, 'Login', '2025-11-27 11:40:09'),
+(509, 3, 'HRD: terima administrasi application #8 (Divisi IT)', '2025-11-27 11:40:52'),
+(510, 3, 'Logout', '2025-11-27 11:43:02'),
+(511, 1, 'Login', '2025-11-27 11:43:08'),
+(512, 1, 'Login', '2026-02-26 03:07:21'),
+(513, 1, 'Logout', '2026-02-26 03:08:22'),
+(514, 2, 'Login', '2026-02-26 03:08:45'),
+(515, 2, 'Kirim lamaran (job #4)', '2026-02-26 03:09:54'),
+(516, 2, 'Logout', '2026-02-26 03:10:01'),
+(517, 3, 'Login', '2026-02-26 03:10:10'),
+(518, 3, 'HRD: terima administrasi application #10 (Divisi Software)', '2026-02-26 03:10:54'),
+(519, 3, 'HRD: set interview application #10', '2026-02-26 03:11:41'),
+(520, 3, 'HRD: terima bekerja application #10 (Divisi Software)', '2026-02-26 03:12:19'),
+(521, 3, 'Logout', '2026-02-26 03:12:44'),
+(522, 1, 'Login', '2026-02-26 03:12:51'),
+(523, 3, 'Login', '2026-03-30 06:50:08'),
+(524, 3, 'Logout', '2026-03-30 06:57:03'),
+(525, 3, 'Login', '2026-03-30 06:57:10'),
+(526, 3, 'Logout', '2026-03-30 07:09:10'),
+(527, 1, 'Login', '2026-03-30 07:09:17'),
+(528, NULL, 'membuat User baru', '2026-03-31 04:33:36'),
+(529, NULL, 'membuat User baru', '2026-03-31 04:34:31'),
+(530, 10, 'Login', '2026-03-31 04:34:42'),
+(531, 10, 'Update profil: No. Telepon: \'belum diisi\' → \'08798465132\', Jenjang Pendidikan: \'belum diisi\' → \'S1\', Jurusan: \'belum diisi\' → \'Teknik Informatika\', CV: Upload CV baru \'cv_10_1774931728.pdf\'', '2026-03-31 04:35:28'),
+(532, 3, 'Login', '2026-03-31 07:03:22'),
+(533, 3, 'Logout', '2026-03-31 07:04:44'),
+(534, 10, 'Login', '2026-03-31 07:08:20'),
+(535, 10, 'Kirim lamaran (job #3)', '2026-03-31 07:09:12'),
+(536, 10, 'Logout', '2026-03-31 07:09:39'),
+(537, 3, 'Login', '2026-03-31 07:11:49'),
+(538, 3, 'HRD: terima administrasi application #11 (Divisi IT)', '2026-03-31 07:12:37'),
+(539, 3, 'HRD: set interview application #11', '2026-03-31 07:13:18'),
+(540, 3, 'HRD: terima bekerja application #11 (Divisi IT)', '2026-03-31 07:15:09'),
+(541, 3, 'Logout', '2026-03-31 07:15:32'),
+(542, 1, 'Login', '2026-03-31 07:15:39');
 
 -- --------------------------------------------------------
 
@@ -702,7 +820,8 @@ CREATE TABLE `lowongan` (
 --
 
 INSERT INTO `lowongan` (`job_id`, `title`, `description`, `requirements`, `location`, `salary_range`, `status`, `posted_by`, `req_jenjang_pendidikan`, `req_jurusan_pendidikan`, `posted_at`, `updated_at`, `hapus`) VALUES
-(3, 'Divisi IT', 'Bekerja pada divisi IT', '1. Bekerja On-Site\r\n2. Berpengalaman dalam mengurus project\r\n3. Bersedia mengikuti jam kerja yang tertera', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-24 11:55:18', NULL, 0);
+(3, 'Divisi IT', 'Bekerja pada divisi IT', '1. Bekerja On-Site\r\n2. Berpengalaman dalam mengurus project\r\n3. Bersedia mengikuti jam kerja yang tertera', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-24 11:55:18', NULL, 0),
+(4, 'Divisi Software', 'aaa', 'aaaa', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-26 01:33:14', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -864,7 +983,9 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `full_name`, `n
 (4, 'konten01', '26ed30f28908645239254ff4f88c1b75', 'rian@gmail.com', 'Rian', NULL, NULL, NULL, NULL, 'konten', 'active', '2025-08-19 03:54:54', 0),
 (6, 'agus01', '01c3c766ce47082b1b130daedd347ffd', 'agus123@gmail.com', 'Agus Agus', NULL, NULL, NULL, NULL, 'hrd', 'active', '2025-08-25 01:34:19', 0),
 (7, 'rekis', 'ef14d8aeff3c7255004a18508133b8ad', 'weioewhifewhuifwhui@gmail.com', 'rekishii lucy', NULL, NULL, NULL, NULL, 'hrd', 'active', '2025-08-25 01:48:43', 0),
-(8, 'pelamar02', 'cc03e747a6afbbcbf8be7668acfebee5', 'ewqodijqoijdqijodwqiojwdjioqjidqjodoi@gmail.com', 'test123', '08131278923178', 2, 2, 'cv_8_1763985384.pdf', 'pelamar', 'active', '2025-10-08 02:10:42', 0);
+(8, 'pelamar02', 'cc03e747a6afbbcbf8be7668acfebee5', 'ewqodijqoijdqijodwqiojwdjioqjidqjodoi@gmail.com', 'test123', '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'pelamar', 'active', '2025-10-08 02:10:42', 0),
+(9, 'pelamar03', 'ee53d4213c897ad632bb8d824762f918', 'qjiodjioqdwjioqwd@gmail.com', 'Test321', '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'pelamar', 'active', '2025-11-26 00:45:02', 0),
+(10, 'pelamar10', '03256b6f995b425e1a10755acaab5777', 'rekislucy993@gmail.com', 'test123', '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'pelamar', 'active', '2026-03-31 04:34:31', 0);
 
 -- --------------------------------------------------------
 
@@ -1030,7 +1151,7 @@ ALTER TABLE `webinar`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `content_categories`
@@ -1084,13 +1205,13 @@ ALTER TABLE `live_streaming`
 -- AUTO_INCREMENT for table `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=430;
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=543;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
 --
 ALTER TABLE `lowongan`
-  MODIFY `job_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `job_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `popup_images`
@@ -1120,7 +1241,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `webinar`
