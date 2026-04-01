@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 01, 2026 at 02:07 AM
+-- Generation Time: Apr 01, 2026 at 01:43 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.29
 
@@ -52,8 +52,7 @@ INSERT INTO `applications` (`application_id`, `job_id`, `user_id`, `no_telepon`,
 (7, 3, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'ditolak tes & wawancara', 'gak tau', '2025-12-04 07:55:00', NULL, '2025-11-25 11:55:09', '2025-11-26 00:55:50'),
 (8, 3, 9, '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'lolos administrasi', 'oke kamu diterima di sini yh', NULL, NULL, '2025-11-26 00:47:55', '2025-11-27 11:40:49'),
 (9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', '2025-11-26 01:34:18', '2025-11-26 01:36:35'),
-(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', '2026-02-26 03:09:54', '2026-02-26 03:12:15'),
-(11, 3, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'diterima bekerja', 'testtt', '2026-04-01 14:13:00', '2026-04-02', '2026-03-31 07:09:12', '2026-03-31 07:15:01');
+(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', '2026-02-26 03:09:54', '2026-02-26 03:12:15');
 
 -- --------------------------------------------------------
 
@@ -791,7 +790,24 @@ INSERT INTO `log_aktivitas` (`log_id`, `user_id`, `action`, `log_time`) VALUES
 (539, 3, 'HRD: set interview application #11', '2026-03-31 07:13:18'),
 (540, 3, 'HRD: terima bekerja application #11 (Divisi IT)', '2026-03-31 07:15:09'),
 (541, 3, 'Logout', '2026-03-31 07:15:32'),
-(542, 1, 'Login', '2026-03-31 07:15:39');
+(542, 1, 'Login', '2026-03-31 07:15:39'),
+(543, 10, 'Login', '2026-04-01 02:08:57'),
+(544, 10, 'Logout', '2026-04-01 04:34:07'),
+(545, 3, 'Login', '2026-04-01 04:34:13'),
+(546, 3, 'Logout', '2026-04-01 04:48:39'),
+(547, 3, 'Login', '2026-04-01 04:48:52'),
+(548, 3, 'Logout', '2026-04-01 04:48:59'),
+(549, 10, 'Login', '2026-04-01 04:49:05'),
+(550, 10, 'Logout', '2026-04-01 04:55:47'),
+(551, 3, 'Login', '2026-04-01 04:56:07'),
+(552, 3, 'HRD: edit lowongan #4 - Divisi Software', '2026-04-01 04:56:30'),
+(553, 3, 'Logout', '2026-04-01 04:56:36'),
+(554, 10, 'Login', '2026-04-01 04:56:43'),
+(555, 10, 'Login', '2026-04-01 06:44:42'),
+(556, 10, 'Kirim lamaran (job #4)', '2026-04-01 07:53:22'),
+(557, 10, 'Logout', '2026-04-01 07:53:43'),
+(558, 3, 'Login', '2026-04-01 07:53:50'),
+(559, 3, 'Logout', '2026-04-01 07:54:52');
 
 -- --------------------------------------------------------
 
@@ -812,6 +828,9 @@ CREATE TABLE `lowongan` (
   `req_jurusan_pendidikan` int DEFAULT NULL,
   `posted_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `deadline` datetime DEFAULT NULL COMMENT 'Batas waktu pendaftaran, NULL = tidak terbatas',
+  `quota` int UNSIGNED DEFAULT NULL COMMENT 'Kuota pendaftar, NULL = tidak terbatas',
+  `close_reason` text COMMENT 'Alasan penutupan otomatis oleh sistem',
   `hapus` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -819,9 +838,9 @@ CREATE TABLE `lowongan` (
 -- Dumping data for table `lowongan`
 --
 
-INSERT INTO `lowongan` (`job_id`, `title`, `description`, `requirements`, `location`, `salary_range`, `status`, `posted_by`, `req_jenjang_pendidikan`, `req_jurusan_pendidikan`, `posted_at`, `updated_at`, `hapus`) VALUES
-(3, 'Divisi IT', 'Bekerja pada divisi IT', '1. Bekerja On-Site\r\n2. Berpengalaman dalam mengurus project\r\n3. Bersedia mengikuti jam kerja yang tertera', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-24 11:55:18', NULL, 0),
-(4, 'Divisi Software', 'aaa', 'aaaa', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-26 01:33:14', NULL, 0);
+INSERT INTO `lowongan` (`job_id`, `title`, `description`, `requirements`, `location`, `salary_range`, `status`, `posted_by`, `req_jenjang_pendidikan`, `req_jurusan_pendidikan`, `posted_at`, `updated_at`, `deadline`, `quota`, `close_reason`, `hapus`) VALUES
+(3, 'Divisi IT', 'Bekerja pada divisi IT', '1. Bekerja On-Site\r\n2. Berpengalaman dalam mengurus project\r\n3. Bersedia mengikuti jam kerja yang tertera', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-24 11:55:18', NULL, NULL, NULL, NULL, 0),
+(4, 'Divisi Software', 'aaa', 'aaaa', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-26 01:33:14', '2026-04-01 04:56:30', '2026-04-16 11:56:00', 10, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1151,7 +1170,7 @@ ALTER TABLE `webinar`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `content_categories`
@@ -1205,7 +1224,7 @@ ALTER TABLE `live_streaming`
 -- AUTO_INCREMENT for table `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=543;
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=560;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
