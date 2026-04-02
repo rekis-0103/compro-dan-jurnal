@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 01, 2026 at 01:43 PM
+-- Generation Time: Apr 02, 2026 at 04:39 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.29
 
@@ -107,6 +107,22 @@ INSERT INTO `galeri_foto` (`foto_id`, `galeri_id`, `foto`) VALUES
 (1, 1, 'uploads/galeri/1756174887_3.jpeg'),
 (2, 1, 'uploads/galeri/1756174887_2.jpeg'),
 (3, 1, 'uploads/galeri/1756174887_1.jpeg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hrd_notes`
+--
+
+CREATE TABLE `hrd_notes` (
+  `note_id` int NOT NULL,
+  `candidate_user_id` int NOT NULL COMMENT 'user_id pelamar — catatan mengikuti kandidat, bukan lamaran',
+  `application_id` int NOT NULL,
+  `hrd_user_id` int NOT NULL,
+  `note` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -807,7 +823,41 @@ INSERT INTO `log_aktivitas` (`log_id`, `user_id`, `action`, `log_time`) VALUES
 (556, 10, 'Kirim lamaran (job #4)', '2026-04-01 07:53:22'),
 (557, 10, 'Logout', '2026-04-01 07:53:43'),
 (558, 3, 'Login', '2026-04-01 07:53:50'),
-(559, 3, 'Logout', '2026-04-01 07:54:52');
+(559, 3, 'Logout', '2026-04-01 07:54:52'),
+(560, 10, 'Login', '2026-04-01 13:54:24'),
+(561, 10, 'Kirim lamaran (job #4)', '2026-04-01 14:02:05'),
+(562, 3, 'Login', '2026-04-02 03:27:51'),
+(563, 3, 'Logout', '2026-04-02 03:45:32'),
+(564, 1, 'Login', '2026-04-02 03:45:43'),
+(565, 1, 'Logout', '2026-04-02 03:46:31'),
+(566, 10, 'Login', '2026-04-02 03:46:44'),
+(567, 10, 'Kirim lamaran (job #4)', '2026-04-02 03:46:50'),
+(568, 10, 'Logout', '2026-04-02 03:46:56'),
+(569, 6, 'Login', '2026-04-02 03:47:04'),
+(570, 6, 'Logout', '2026-04-02 03:47:22'),
+(571, 3, 'Login', '2026-04-02 03:47:31'),
+(572, 3, 'HRD: tambah catatan internal application #14', '2026-04-02 03:47:56'),
+(573, 3, 'HRD: terima administrasi application #14 (Divisi Software)', '2026-04-02 03:48:31'),
+(574, 3, 'Logout', '2026-04-02 03:49:26'),
+(575, 10, 'Login', '2026-04-02 03:49:41'),
+(576, 10, 'Logout', '2026-04-02 03:50:23'),
+(577, 3, 'Login', '2026-04-02 03:50:29'),
+(578, 3, 'HRD: set interview application #14', '2026-04-02 03:50:43'),
+(579, 3, 'HRD: tolak setelah interview application #14 (Divisi Software)', '2026-04-02 03:50:51'),
+(580, 3, 'Logout', '2026-04-02 03:50:58'),
+(581, 10, 'Login', '2026-04-02 03:51:09'),
+(582, 10, 'Kirim lamaran (job #4)', '2026-04-02 04:34:53'),
+(583, 10, 'Logout', '2026-04-02 04:34:54'),
+(584, 3, 'Login', '2026-04-02 04:34:59'),
+(585, 3, 'HRD: tambah catatan untuk kandidat #10 (lamaran #15)', '2026-04-02 04:35:36'),
+(586, 3, 'HRD: tolak administrasi application #15 (Divisi Software)', '2026-04-02 04:35:54'),
+(587, 3, 'Logout', '2026-04-02 04:36:03'),
+(588, 10, 'Login', '2026-04-02 04:36:14'),
+(589, 10, 'Kirim lamaran (job #3)', '2026-04-02 04:36:28'),
+(590, 10, 'Logout', '2026-04-02 04:36:30'),
+(591, 3, 'Login', '2026-04-02 04:36:38'),
+(592, 3, 'Logout', '2026-04-02 04:37:07'),
+(593, 10, 'Login', '2026-04-02 04:37:20');
 
 -- --------------------------------------------------------
 
@@ -1065,6 +1115,15 @@ ALTER TABLE `galeri_foto`
   ADD KEY `galeri_id` (`galeri_id`);
 
 --
+-- Indexes for table `hrd_notes`
+--
+ALTER TABLE `hrd_notes`
+  ADD PRIMARY KEY (`note_id`),
+  ADD KEY `hrd_user_id` (`hrd_user_id`),
+  ADD KEY `hrd_notes_ibfk_1` (`application_id`),
+  ADD KEY `candidate_user_id` (`candidate_user_id`);
+
+--
 -- Indexes for table `jenjang_pendidikan`
 --
 ALTER TABLE `jenjang_pendidikan`
@@ -1170,7 +1229,7 @@ ALTER TABLE `webinar`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `content_categories`
@@ -1189,6 +1248,12 @@ ALTER TABLE `galeri`
 --
 ALTER TABLE `galeri_foto`
   MODIFY `foto_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `hrd_notes`
+--
+ALTER TABLE `hrd_notes`
+  MODIFY `note_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `jenjang_pendidikan`
@@ -1224,7 +1289,7 @@ ALTER TABLE `live_streaming`
 -- AUTO_INCREMENT for table `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=560;
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=594;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
@@ -1292,6 +1357,14 @@ ALTER TABLE `galeri`
 --
 ALTER TABLE `galeri_foto`
   ADD CONSTRAINT `galeri_foto_ibfk_1` FOREIGN KEY (`galeri_id`) REFERENCES `galeri` (`galeri_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `hrd_notes`
+--
+ALTER TABLE `hrd_notes`
+  ADD CONSTRAINT `hrd_notes_ibfk_1` FOREIGN KEY (`application_id`) REFERENCES `applications` (`application_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `hrd_notes_ibfk_2` FOREIGN KEY (`hrd_user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `hrd_notes_ibfk_candidate` FOREIGN KEY (`candidate_user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `jurusan_pendidikan`
