@@ -273,3 +273,112 @@
   background: #fee2e2;
   color: #dc2626;
 }
+
+/* === HRD NOTIFICATIONS BOX === */
+.notifications-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.notifications-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.notifications-header h3 {
+  color: #1e293b;
+  margin: 0;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unread-badge {
+  background: #2563eb;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.notification-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #fff;
+  margin-bottom: 12px;
+}
+
+.notification-item.unread {
+  border-color: #60a5fa;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+}
+
+.notification-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.notification-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification-title {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.notification-message {
+  color: #475569;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.notification-datetime {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notification-empty {
+  text-align: center;
+  padding: 18px 10px;
+  color: #94a3b8;
+}
+
+.notification-empty p {
+  margin: 0;
+  font-style: italic;
+}
+
+.notification-empty i {
+  font-size: 1.7rem;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .notifications-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

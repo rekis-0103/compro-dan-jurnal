@@ -36,6 +36,31 @@ if ($r4) {
     $accepted = (int)mysqli_fetch_assoc($r4)['c'];
 }
 
+// Notifications from HRD status updates
+$unread_count = 0;
+$rnotif = mysqli_query($conn, "SELECT COUNT(*) c FROM pelamar_notifications WHERE user_id=$user_id AND is_read=0");
+if ($rnotif) {
+    $unread_count = (int)mysqli_fetch_assoc($rnotif)['c'];
+}
+$notifications = mysqli_query(
+    $conn,
+    "SELECT notification_id, title, message, status, is_read, created_at
+     FROM pelamar_notifications
+     WHERE user_id=$user_id
+     ORDER BY created_at DESC
+     LIMIT 5"
+);
+
+// Mark as read once the user opens the dashboard
+if ($unread_count > 0) {
+    mysqli_query(
+        $conn,
+        "UPDATE pelamar_notifications
+         SET is_read=1
+         WHERE user_id=$user_id AND is_read=0"
+    );
+}
+
 // Recent applications (5)
 $recent = mysqli_query($conn, "SELECT a.*, l.title FROM applications a JOIN lowongan l ON a.job_id=l.job_id WHERE a.user_id=$user_id ORDER BY a.applied_at DESC LIMIT 5");
 ?>
@@ -101,6 +126,53 @@ $recent = mysqli_query($conn, "SELECT a.*, l.title FROM applications a JOIN lowo
                     <h3><?php echo $accepted; ?></h3>
                     <p>Diterima</p>
                 </div>
+            </div>
+
+            <div class="notifications-box">
+                <div class="notifications-header">
+                    <h3>
+                        <i class="fas fa-bell"></i> Notifikasi HRD
+                    </h3>
+                    <span class="unread-badge"><?php echo $unread_count; ?> baru</span>
+                </div>
+
+                <?php if ($notifications && mysqli_num_rows($notifications) > 0): ?>
+                    <?php while ($n = mysqli_fetch_assoc($notifications)): ?>
+                        <?php
+                            $notifStatus = $n['status'] ?? '';
+                            $badgeClass = $notifStatus === 'diterima bekerja'
+                                ? 'status-accepted'
+                                : (stripos($notifStatus, 'ditolak') !== false ? 'status-rejected' : 'status-pending');
+                            $isRead = (int)($n['is_read'] ?? 0) === 1;
+                        ?>
+
+                        <div class="notification-item <?php echo $isRead ? '' : 'unread'; ?>">
+                            <div class="notification-top">
+                                <div class="notification-title-row">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="notification-title"><?php echo htmlspecialchars($n['title']); ?></span>
+                                </div>
+                                <span class="status-badge <?php echo $badgeClass; ?>">
+                                    <?php echo htmlspecialchars($notifStatus); ?>
+                                </span>
+                            </div>
+
+                            <div class="notification-message">
+                                <?php echo nl2br(htmlspecialchars($n['message'])); ?>
+                            </div>
+
+                            <div class="notification-datetime">
+                                <i class="fas fa-clock"></i>
+                                <?php echo date('d/m/Y H:i', strtotime($n['created_at'])); ?>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <div class="notification-empty">
+                        <i class="fas fa-bell-slash"></i>
+                        <p>Belum ada notifikasi</p>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div class="recent-applications">

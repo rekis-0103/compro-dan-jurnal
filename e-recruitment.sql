@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 02, 2026 at 04:39 AM
+-- Generation Time: Apr 02, 2026 at 07:17 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.29
 
@@ -52,7 +52,8 @@ INSERT INTO `applications` (`application_id`, `job_id`, `user_id`, `no_telepon`,
 (7, 3, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'ditolak tes & wawancara', 'gak tau', '2025-12-04 07:55:00', NULL, '2025-11-25 11:55:09', '2025-11-26 00:55:50'),
 (8, 3, 9, '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'lolos administrasi', 'oke kamu diterima di sini yh', NULL, NULL, '2025-11-26 00:47:55', '2025-11-27 11:40:49'),
 (9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', '2025-11-26 01:34:18', '2025-11-26 01:36:35'),
-(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', '2026-02-26 03:09:54', '2026-02-26 03:12:15');
+(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', '2026-02-26 03:09:54', '2026-02-26 03:12:15'),
+(17, 4, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'lolos administrasi', 'yey', NULL, NULL, '2026-04-02 07:05:41', '2026-04-02 07:06:00');
 
 -- --------------------------------------------------------
 
@@ -123,6 +124,13 @@ CREATE TABLE `hrd_notes` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `hrd_notes`
+--
+
+INSERT INTO `hrd_notes` (`note_id`, `candidate_user_id`, `application_id`, `hrd_user_id`, `note`, `created_at`, `updated_at`) VALUES
+(3, 10, 17, 3, 'tes', '2026-04-02 07:10:02', NULL);
 
 -- --------------------------------------------------------
 
@@ -857,7 +865,23 @@ INSERT INTO `log_aktivitas` (`log_id`, `user_id`, `action`, `log_time`) VALUES
 (590, 10, 'Logout', '2026-04-02 04:36:30'),
 (591, 3, 'Login', '2026-04-02 04:36:38'),
 (592, 3, 'Logout', '2026-04-02 04:37:07'),
-(593, 10, 'Login', '2026-04-02 04:37:20');
+(593, 10, 'Login', '2026-04-02 04:37:20'),
+(594, 10, 'Logout', '2026-04-02 04:44:20'),
+(595, 3, 'Login', '2026-04-02 04:44:25'),
+(596, 3, 'Logout', '2026-04-02 04:49:39'),
+(597, 10, 'Login', '2026-04-02 04:49:46'),
+(598, 10, 'Login', '2026-04-02 06:59:47'),
+(599, 10, 'Kirim lamaran (job #4)', '2026-04-02 07:05:41'),
+(600, 10, 'Logout', '2026-04-02 07:05:44'),
+(601, 3, 'Login', '2026-04-02 07:05:49'),
+(602, 3, 'HRD: terima administrasi application #17 (Divisi Software)', '2026-04-02 07:06:05'),
+(603, 3, 'Logout', '2026-04-02 07:06:06'),
+(604, 10, 'Login', '2026-04-02 07:06:12'),
+(605, 10, 'Logout', '2026-04-02 07:09:39'),
+(606, 3, 'Login', '2026-04-02 07:09:47'),
+(607, 3, 'HRD: tambah catatan untuk kandidat #10 (lamaran #17)', '2026-04-02 07:10:02'),
+(608, 3, 'Logout', '2026-04-02 07:10:09'),
+(609, 10, 'Login', '2026-04-02 07:10:17');
 
 -- --------------------------------------------------------
 
@@ -891,6 +915,31 @@ CREATE TABLE `lowongan` (
 INSERT INTO `lowongan` (`job_id`, `title`, `description`, `requirements`, `location`, `salary_range`, `status`, `posted_by`, `req_jenjang_pendidikan`, `req_jurusan_pendidikan`, `posted_at`, `updated_at`, `deadline`, `quota`, `close_reason`, `hapus`) VALUES
 (3, 'Divisi IT', 'Bekerja pada divisi IT', '1. Bekerja On-Site\r\n2. Berpengalaman dalam mengurus project\r\n3. Bersedia mengikuti jam kerja yang tertera', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-24 11:55:18', NULL, NULL, NULL, NULL, 0),
 (4, 'Divisi Software', 'aaa', 'aaaa', 'PT Waindo Specterra', '10.000.000 - 15.000.000', 'open', 3, 3, 3, '2025-11-26 01:33:14', '2026-04-01 04:56:30', '2026-04-16 11:56:00', 10, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pelamar_notifications`
+--
+
+CREATE TABLE `pelamar_notifications` (
+  `notification_id` int NOT NULL,
+  `user_id` int NOT NULL COMMENT 'user_id pelamar penerima notifikasi',
+  `application_id` int NOT NULL COMMENT 'application konteks notifikasi',
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `status` varchar(255) DEFAULT NULL COMMENT 'status terbaru aplikasi',
+  `is_read` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pelamar_notifications`
+--
+
+INSERT INTO `pelamar_notifications` (`notification_id`, `user_id`, `application_id`, `title`, `message`, `status`, `is_read`, `created_at`, `updated_at`) VALUES
+(1, 10, 17, 'Update Status - Divisi Software', 'Status terbaru: lolos administrasi. Alasan: yey', 'lolos administrasi', 1, '2026-04-02 07:06:05', '2026-04-02 07:06:12');
 
 -- --------------------------------------------------------
 
@@ -1175,6 +1224,14 @@ ALTER TABLE `lowongan`
   ADD KEY `fk_lowongan_jurusan` (`req_jurusan_pendidikan`);
 
 --
+-- Indexes for table `pelamar_notifications`
+--
+ALTER TABLE `pelamar_notifications`
+  ADD PRIMARY KEY (`notification_id`),
+  ADD KEY `pelamar_notifications_user_id` (`user_id`),
+  ADD KEY `pelamar_notifications_application_id` (`application_id`);
+
+--
 -- Indexes for table `popup_images`
 --
 ALTER TABLE `popup_images`
@@ -1229,7 +1286,7 @@ ALTER TABLE `webinar`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `application_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `content_categories`
@@ -1253,7 +1310,7 @@ ALTER TABLE `galeri_foto`
 -- AUTO_INCREMENT for table `hrd_notes`
 --
 ALTER TABLE `hrd_notes`
-  MODIFY `note_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `note_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jenjang_pendidikan`
@@ -1289,13 +1346,19 @@ ALTER TABLE `live_streaming`
 -- AUTO_INCREMENT for table `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=594;
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=610;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
 --
 ALTER TABLE `lowongan`
   MODIFY `job_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `pelamar_notifications`
+--
+ALTER TABLE `pelamar_notifications`
+  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `popup_images`

@@ -45,7 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_
     } elseif ($_POST['action'] === 'accept_hire') {
         $reason = esc($conn, $_POST['reason']);
         $start_date = esc($conn, $_POST['start_date']);
-        $q = "UPDATE applications SET status='diterima bekerja', updated_at=NOW(), reason='$reason', start_date='$start_date' WHERE application_id=$application_id";
+        $new_status = 'diterima bekerja';
+        $q = "UPDATE applications SET status='$new_status', updated_at=NOW(), reason='$reason', start_date='$start_date' WHERE application_id=$application_id";
         if (mysqli_query($conn, $q)) {
             $info = mysqli_query($conn, "SELECT a.*, u.email, u.full_name, l.title FROM applications a JOIN users u ON a.user_id=u.user_id JOIN lowongan l ON a.job_id=l.job_id WHERE a.application_id=$application_id");
             if ($info) {
@@ -57,6 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_
                     "Tanggal Mulai: " . $start_date . "\n" .
                     "Catatan: " . $reason . "\n\nSampai jumpa di hari pertama.\nHRD";
                 sendEmail($to, $subject, $msg);
+                $notif_title = esc($conn, "Update Status - " . $row['title']);
+                $notif_msg   = "Status terbaru: $new_status. Tanggal mulai: $start_date. Catatan: $reason";
+                mysqli_query(
+                    $conn,
+                    "INSERT INTO pelamar_notifications (user_id, application_id, title, message, status, is_read)
+                     VALUES (" . (int)$row['user_id'] . ", $application_id, '$notif_title', '$notif_msg', '$new_status', 0)"
+                );
                 logActivity($conn, $user_id, "HRD: terima bekerja application #$application_id (" . $row['title'] . ")");
             }
             $success = 'Kandidat diterima bekerja';
@@ -65,7 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_
         }
     } elseif ($_POST['action'] === 'reject_after_interview') {
         $reason = esc($conn, $_POST['reason']);
-        $q = "UPDATE applications SET status='ditolak', updated_at=NOW(), reason='$reason' WHERE application_id=$application_id";
+        $new_status = 'ditolak';
+        $q = "UPDATE applications SET status='$new_status', updated_at=NOW(), reason='$reason' WHERE application_id=$application_id";
         if (mysqli_query($conn, $q)) {
             $info = mysqli_query($conn, "SELECT a.*, u.email, u.full_name, l.title FROM applications a JOIN users u ON a.user_id=u.user_id JOIN lowongan l ON a.job_id=l.job_id WHERE a.application_id=$application_id");
             if ($info) {
@@ -76,6 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_
                     "Terima kasih telah mengikuti proses. Mohon maaf Anda BELUM DITERIMA untuk posisi " . $row['title'] . ".\n" .
                     "Alasan: " . $reason . "\n\nSemoga sukses di kesempatan berikutnya.\nHRD";
                 sendEmail($to, $subject, $msg);
+                $notif_title = esc($conn, "Update Status - " . $row['title']);
+                $notif_msg   = "Status terbaru: $new_status. Alasan: $reason";
+                mysqli_query(
+                    $conn,
+                    "INSERT INTO pelamar_notifications (user_id, application_id, title, message, status, is_read)
+                     VALUES (" . (int)$row['user_id'] . ", $application_id, '$notif_title', '$notif_msg', '$new_status', 0)"
+                );
                 logActivity($conn, $user_id, "HRD: tolak setelah interview application #$application_id (" . $row['title'] . ")");
             }
             $success = 'Kandidat ditolak';
