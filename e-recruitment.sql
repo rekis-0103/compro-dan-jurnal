@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 02, 2026 at 07:17 AM
+-- Generation Time: Apr 04, 2026 at 08:52 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.29
 
@@ -39,6 +39,7 @@ CREATE TABLE `applications` (
   `reason` text,
   `interview_date` datetime DEFAULT NULL,
   `start_date` date DEFAULT NULL,
+  `employment_status` enum('aktif','non_aktif') DEFAULT NULL COMMENT 'Status hubungan kerja (untuk lamaran diterima bekerja)',
   `applied_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -47,13 +48,13 @@ CREATE TABLE `applications` (
 -- Dumping data for table `applications`
 --
 
-INSERT INTO `applications` (`application_id`, `job_id`, `user_id`, `no_telepon`, `id_jenjang_pendidikan`, `id_jurusan_pendidikan`, `cv`, `status`, `reason`, `interview_date`, `start_date`, `applied_at`, `updated_at`) VALUES
-(6, 3, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', 'test', '2025-11-11 15:33:00', '2025-11-26', '2025-11-25 07:24:36', '2025-11-25 07:46:09'),
-(7, 3, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'ditolak tes & wawancara', 'gak tau', '2025-12-04 07:55:00', NULL, '2025-11-25 11:55:09', '2025-11-26 00:55:50'),
-(8, 3, 9, '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'lolos administrasi', 'oke kamu diterima di sini yh', NULL, NULL, '2025-11-26 00:47:55', '2025-11-27 11:40:49'),
-(9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', '2025-11-26 01:34:18', '2025-11-26 01:36:35'),
-(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', '2026-02-26 03:09:54', '2026-02-26 03:12:15'),
-(17, 4, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'lolos administrasi', 'yey', NULL, NULL, '2026-04-02 07:05:41', '2026-04-02 07:06:00');
+INSERT INTO `applications` (`application_id`, `job_id`, `user_id`, `no_telepon`, `id_jenjang_pendidikan`, `id_jurusan_pendidikan`, `cv`, `status`, `reason`, `interview_date`, `start_date`, `employment_status`, `applied_at`, `updated_at`) VALUES
+(6, 3, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', 'test', '2025-11-11 15:33:00', '2025-11-26', 'aktif', '2025-11-25 07:24:36', '2025-11-25 07:46:09'),
+(7, 3, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'ditolak tes & wawancara', 'gak tau', '2025-12-04 07:55:00', NULL, NULL, '2025-11-25 11:55:09', '2025-11-26 00:55:50'),
+(8, 3, 9, '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'lolos administrasi', 'oke kamu diterima di sini yh', NULL, NULL, NULL, '2025-11-26 00:47:55', '2025-11-27 11:40:49'),
+(9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', 'aktif', '2025-11-26 01:34:18', '2025-11-26 01:36:35'),
+(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', 'aktif', '2026-02-26 03:09:54', '2026-02-26 03:12:15'),
+(17, 4, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'diterima bekerja', 'yeyyyyyyyyy', '2026-04-16 15:44:00', '2026-04-17', 'aktif', '2026-04-02 07:05:41', '2026-04-04 08:45:14');
 
 -- --------------------------------------------------------
 
@@ -881,7 +882,17 @@ INSERT INTO `log_aktivitas` (`log_id`, `user_id`, `action`, `log_time`) VALUES
 (606, 3, 'Login', '2026-04-02 07:09:47'),
 (607, 3, 'HRD: tambah catatan untuk kandidat #10 (lamaran #17)', '2026-04-02 07:10:02'),
 (608, 3, 'Logout', '2026-04-02 07:10:09'),
-(609, 10, 'Login', '2026-04-02 07:10:17');
+(609, 10, 'Login', '2026-04-02 07:10:17'),
+(610, 10, 'Logout', '2026-04-04 08:41:34'),
+(611, 1, 'Login', '2026-04-04 08:41:46'),
+(612, 1, 'Logout', '2026-04-04 08:42:26'),
+(613, 10, 'Login', '2026-04-04 08:43:37'),
+(614, 10, 'Logout', '2026-04-04 08:44:01'),
+(615, 3, 'Login', '2026-04-04 08:44:12'),
+(616, 3, 'HRD: set interview application #17', '2026-04-04 08:45:02'),
+(617, 3, 'HRD: terima bekerja application #17 (Divisi Software)', '2026-04-04 08:45:16'),
+(618, 3, 'Logout', '2026-04-04 08:50:42'),
+(619, 10, 'Login', '2026-04-04 08:50:51');
 
 -- --------------------------------------------------------
 
@@ -939,7 +950,8 @@ CREATE TABLE `pelamar_notifications` (
 --
 
 INSERT INTO `pelamar_notifications` (`notification_id`, `user_id`, `application_id`, `title`, `message`, `status`, `is_read`, `created_at`, `updated_at`) VALUES
-(1, 10, 17, 'Update Status - Divisi Software', 'Status terbaru: lolos administrasi. Alasan: yey', 'lolos administrasi', 1, '2026-04-02 07:06:05', '2026-04-02 07:06:12');
+(1, 10, 17, 'Update Status - Divisi Software', 'Status terbaru: lolos administrasi. Alasan: yey', 'lolos administrasi', 1, '2026-04-02 07:06:05', '2026-04-02 07:06:12'),
+(2, 10, 17, 'Update Status - Divisi Software', 'Status terbaru: diterima bekerja. Tanggal mulai: 2026-04-17. Alasan: yeyyyyyyyyy', 'diterima bekerja', 1, '2026-04-04 08:45:16', '2026-04-04 08:50:51');
 
 -- --------------------------------------------------------
 
@@ -1346,7 +1358,7 @@ ALTER TABLE `live_streaming`
 -- AUTO_INCREMENT for table `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=610;
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=620;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
@@ -1358,7 +1370,7 @@ ALTER TABLE `lowongan`
 -- AUTO_INCREMENT for table `pelamar_notifications`
 --
 ALTER TABLE `pelamar_notifications`
-  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `popup_images`

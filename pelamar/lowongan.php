@@ -27,18 +27,36 @@ $user_info    = mysqli_fetch_assoc($user_query);
 $user_jenjang = $user_info['id_jenjang_pendidikan'];
 $user_jurusan = $user_info['id_jurusan_pendidikan'];
 
-// Check active application
+// Lamaran masih berjalan (harus sama dengan pelamar/profile.php — termasuk 'menunggu')
+$active_status_sql = "'menunggu', 'pending', 'seleksi administrasi', 'lolos administrasi', 'tes & wawancara'";
+
 $activeApplicationQuery = mysqli_query($conn, "
     SELECT a.*, l.title 
     FROM applications a 
     JOIN lowongan l ON a.job_id = l.job_id 
     WHERE a.user_id = $user_id 
-    AND a.status IN ('pending', 'seleksi administrasi', 'lolos administrasi', 'tes & wawancara')
+    AND a.status IN ($active_status_sql)
     ORDER BY a.applied_at DESC 
     LIMIT 1
 ");
 $hasActiveApplication = mysqli_num_rows($activeApplicationQuery) > 0;
 $activeApplication    = $hasActiveApplication ? mysqli_fetch_assoc($activeApplicationQuery) : null;
+
+// Karyawan aktif: diterima bekerja dan belum non-aktif (kolom employment_status opsional di DB lama)
+$employedQuery = mysqli_query($conn, "
+    SELECT a.*, l.title 
+    FROM applications a 
+    JOIN lowongan l ON a.job_id = l.job_id 
+    WHERE a.user_id = $user_id 
+    AND a.status = 'diterima bekerja'
+    AND (a.employment_status IS NULL OR a.employment_status = 'aktif')
+    ORDER BY a.applied_at DESC 
+    LIMIT 1
+");
+$isEmployedActive = $employedQuery && mysqli_num_rows($employedQuery) > 0;
+$employedApplication = $isEmployedActive ? mysqli_fetch_assoc($employedQuery) : null;
+
+$lowonganLocked = $hasActiveApplication || $isEmployedActive;
 
 // Filter parameters
 $status_filter = isset($_GET['status']) ? $_GET['status'] : 'all';
@@ -124,14 +142,7 @@ $list = mysqli_query($conn, "
         .status-lolos-administrasi   { background:#d1fae5; color:#065f46; border:1px solid #a7f3d0; }
         .status-tes-wawancara        { background:#e0e7ff; color:#3730a3; border:1px solid #c7d2fe; }
         .view-application-btn { margin-top: 15px; }
-        .job-item.disabled { opacity:.6; pointer-events:none; position:relative; }
-        .job-item.disabled::after {
-            content:"Anda sudah memiliki lamaran aktif";
-            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-            background:rgba(0,0,0,.8); color:white; padding:10px 20px;
-            border-radius:8px; font-weight:600; font-size:14px;
-            white-space:nowrap; z-index:10;
-        }
+        /* overlay pesan: dipindah ke lowongan.css (.locked-pipeline / .locked-employed) */
 
         /* ── Info chips ── */
         .job-info-row {
@@ -240,6 +251,23 @@ $list = mysqli_query($conn, "
                         </a>
                     </div>
                 </div>
+            <?php elseif ($isEmployedActive): ?>
+                <div class="employed-notice">
+                    <h4><i class="fas fa-building"></i> Anda Terdaftar sebagai Karyawan</h4>
+                    <p><strong>Posisi:</strong> <?php echo htmlspecialchars($employedApplication['title']); ?></p>
+                    <?php if (!empty($employedApplication['start_date'])): ?>
+                        <p><strong>Tanggal mulai kerja:</strong> <?php echo date('d F Y', strtotime($employedApplication['start_date'])); ?></p>
+                    <?php endif; ?>
+                    <p style="margin-top:15px;padding-top:15px;border-top:1px solid #86efac;">
+                        <i class="fas fa-lock"></i>
+                        <strong>Halaman lowongan terkunci:</strong> Data Anda sudah masuk sebagai karyawan. Anda tidak dapat melamar lowongan lain melalui sistem ini.
+                    </p>
+                    <div class="view-application-btn">
+                        <a href="applications.php" class="btn btn-primary">
+                            <i class="fas fa-file-alt"></i> Lihat Riwayat Lamaran
+                        </a>
+                    </div>
+                </div>
             <?php endif; ?>
 
             <div class="card">
@@ -257,7 +285,7 @@ $list = mysqli_query($conn, "
                                            placeholder="Masukkan nama pekerjaan..."
                                            value="<?php echo htmlspecialchars($search_query); ?>"
                                            class="search-input"
-                                           <?php echo $hasActiveApplication ? 'disabled' : ''; ?>>
+                                           <?php echo $lowonganLocked ? 'disabled' : ''; ?>>
                                     <?php if (!empty($search_query)): ?>
                                         <button type="button" class="clear-search" onclick="clearSearch()" title="Hapus pencarian">
                                             <i class="fas fa-times"></i>
@@ -269,13 +297,13 @@ $list = mysqli_query($conn, "
                                 <label for="status-filter"><i class="fas fa-filter"></i> Filter Status:</label>
                                 <select id="status-filter" name="status"
                                         onchange="document.getElementById('filterForm').submit()"
-                                        <?php echo $hasActiveApplication ? 'disabled' : ''; ?>>
+                                        <?php echo $lowonganLocked ? 'disabled' : ''; ?>>
                                     <option value="all"    <?php echo $status_filter==='all'    ? 'selected' : ''; ?>>Semua Status</option>
                                     <option value="open"   <?php echo $status_filter==='open'   ? 'selected' : ''; ?>>Aktif</option>
                                     <option value="closed" <?php echo $status_filter==='closed' ? 'selected' : ''; ?>>Ditutup</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-search" <?php echo $hasActiveApplication ? 'disabled' : ''; ?>>
+                            <button type="submit" class="btn btn-primary btn-search" <?php echo $lowonganLocked ? 'disabled' : ''; ?>>
                                 <i class="fas fa-search"></i> Cari
                             </button>
                         </form>
@@ -316,7 +344,13 @@ $list = mysqli_query($conn, "
 
                             $showInfoRow = $hasDeadline || $hasQuota || !empty($row['close_reason']);
                         ?>
-                        <div class="job-item <?php echo $row['status']==='closed' ? 'job-closed' : ''; ?> <?php echo $hasActiveApplication ? 'disabled' : ''; ?>">
+                        <?php
+                        $lockClass = '';
+                        if ($lowonganLocked) {
+                            $lockClass = 'disabled ' . ($hasActiveApplication ? 'locked-pipeline' : 'locked-employed');
+                        }
+                        ?>
+                        <div class="job-item <?php echo $row['status']==='closed' ? 'job-closed' : ''; ?> <?php echo $lockClass; ?>">
 
                             <!-- Header: judul + status badge -->
                             <div class="job-header">

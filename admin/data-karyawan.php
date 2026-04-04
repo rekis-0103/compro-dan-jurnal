@@ -14,6 +14,41 @@ $username = $_SESSION['username'];
 $full_name = $_SESSION['full_name'];
 $role = $_SESSION['role'];
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_employment_status'], $_POST['application_id'])) {
+    $app_id = (int) $_POST['application_id'];
+    $new_es = $_POST['employment_status'] === 'non_aktif' ? 'non_aktif' : 'aktif';
+    $stmt = mysqli_prepare(
+        $conn,
+        "UPDATE applications SET employment_status = ?, updated_at = NOW() WHERE application_id = ? AND status = 'diterima bekerja'"
+    );
+    if ($stmt && mysqli_stmt_bind_param($stmt, 'si', $new_es, $app_id) && mysqli_stmt_execute($stmt)) {
+        $action = mysqli_real_escape_string($conn, "Admin: ubah status karyawan application #$app_id menjadi $new_es");
+        mysqli_query($conn, "INSERT INTO log_aktivitas (user_id, action) VALUES ($user_id, '$action')");
+    }
+    if ($stmt) {
+        mysqli_stmt_close($stmt);
+    }
+    $redir_filter = isset($_POST['emp_filter_redirect']) ? $_POST['emp_filter_redirect'] : 'semua';
+    if (!in_array($redir_filter, ['semua', 'aktif', 'non_aktif'], true)) {
+        $redir_filter = 'semua';
+    }
+    $qs = $redir_filter !== 'semua' ? '?emp_filter=' . urlencode($redir_filter) : '';
+    header('Location: data-karyawan.php' . $qs);
+    exit();
+}
+
+$emp_filter = isset($_GET['emp_filter']) ? $_GET['emp_filter'] : 'semua';
+if (!in_array($emp_filter, ['semua', 'aktif', 'non_aktif'], true)) {
+    $emp_filter = 'semua';
+}
+
+$emp_where = '';
+if ($emp_filter === 'aktif') {
+    $emp_where = " AND (a.employment_status IS NULL OR a.employment_status = 'aktif')";
+} elseif ($emp_filter === 'non_aktif') {
+    $emp_where = " AND a.employment_status = 'non_aktif'";
+}
+
 // Query untuk mendapatkan data karyawan yang diterima bekerja
 $query_karyawan = "SELECT 
     a.application_id,
@@ -24,13 +59,15 @@ $query_karyawan = "SELECT
     jr.nama_jurusan,
     l.title as posisi,
     a.start_date,
-    a.interview_date
+    a.interview_date,
+    a.employment_status
 FROM applications a
 INNER JOIN users u ON a.user_id = u.user_id
 INNER JOIN lowongan l ON a.job_id = l.job_id
 LEFT JOIN jenjang_pendidikan j ON a.id_jenjang_pendidikan = j.id_jenjang
 LEFT JOIN jurusan_pendidikan jr ON a.id_jurusan_pendidikan = jr.id_jurusan
 WHERE a.status = 'diterima bekerja'
+$emp_where
 ORDER BY a.start_date DESC";
 
 $result_karyawan = mysqli_query($conn, $query_karyawan);
@@ -85,11 +122,19 @@ $total_karyawan = mysqli_num_rows($result_karyawan);
 <div class="karyawan-container">
     <div class="karyawan-header">
         <div class="header-info">
-            <h2>Total Karyawan: <?php echo $total_karyawan; ?></h2>
+            <h2>Total: <?php echo $total_karyawan; ?> karyawan</h2>
+            <form method="get" class="emp-filter-form">
+                <label for="emp_filter">Tampilkan:</label>
+                <select name="emp_filter" id="emp_filter" onchange="this.form.submit()">
+                    <option value="semua" <?php echo $emp_filter === 'semua' ? 'selected' : ''; ?>>Semua</option>
+                    <option value="aktif" <?php echo $emp_filter === 'aktif' ? 'selected' : ''; ?>>Aktif</option>
+                    <option value="non_aktif" <?php echo $emp_filter === 'non_aktif' ? 'selected' : ''; ?>>Non-aktif</option>
+                </select>
+            </form>
         </div>
         <?php if($total_karyawan > 0): ?>
         <div class="header-actions">
-            <a href="export_karyawan.php" class="btn-export" target="_blank">
+            <a href="export_karyawan.php<?php echo $emp_filter !== 'semua' ? '?emp_filter=' . urlencode($emp_filter) : ''; ?>" class="btn-export" target="_blank">
                 <i class="fas fa-file-pdf"></i> Export PDF
             </a>
         </div>
@@ -108,6 +153,8 @@ $total_karyawan = mysqli_num_rows($result_karyawan);
                     <th>Jurusan</th>
                     <th>Posisi</th>
                     <th>Tanggal Mulai Kerja</th>
+                    <th>Status Karyawan</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -118,8 +165,10 @@ $total_karyawan = mysqli_num_rows($result_karyawan);
                         $pendidikan = $row['nama_jenjang'] ?? '-';
                         $jurusan = $row['nama_jurusan'] ?? '-';
                         $start_date = date('d/m/Y', strtotime($row['start_date']));
+                        $es = $row['employment_status'] ?? null;
+                        $is_active = ($es === null || $es === '' || $es === 'aktif');
                 ?>
-                <tr>
+                <tr class="<?php echo $is_active ? 'row-emp-aktif' : 'row-emp-nonaktif'; ?>">
                     <td><?php echo $no++; ?></td>
                     <td><?php echo htmlspecialchars($row['full_name']); ?></td>
                     <td><?php echo htmlspecialchars($row['email']); ?></td>
@@ -128,13 +177,32 @@ $total_karyawan = mysqli_num_rows($result_karyawan);
                     <td><?php echo htmlspecialchars($jurusan); ?></td>
                     <td><?php echo htmlspecialchars($row['posisi']); ?></td>
                     <td><?php echo $start_date; ?></td>
+                    <td>
+                        <?php if ($is_active): ?>
+                            <span class="badge-emp badge-emp-aktif"><i class="fas fa-user-check"></i> Aktif</span>
+                        <?php else: ?>
+                            <span class="badge-emp badge-emp-nonaktif"><i class="fas fa-user-slash"></i> Non-aktif</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <form method="post" class="form-emp-status">
+                            <input type="hidden" name="update_employment_status" value="1">
+                            <input type="hidden" name="application_id" value="<?php echo (int)$row['application_id']; ?>">
+                            <input type="hidden" name="emp_filter_redirect" value="<?php echo htmlspecialchars($emp_filter); ?>">
+                            <select name="employment_status" class="select-emp-status" title="Status hubungan kerja">
+                                <option value="aktif" <?php echo $is_active ? 'selected' : ''; ?>>Aktif</option>
+                                <option value="non_aktif" <?php echo !$is_active ? 'selected' : ''; ?>>Non-aktif</option>
+                            </select>
+                            <button type="submit" class="btn-emp-save"><i class="fas fa-save"></i></button>
+                        </form>
+                    </td>
                 </tr>
                 <?php 
                     endwhile;
                 else:
                 ?>
                 <tr>
-                    <td colspan="9" class="text-center">Belum ada karyawan yang diterima</td>
+                    <td colspan="10" class="text-center">Belum ada data untuk filter ini</td>
                 </tr>
                 <?php endif; ?>
             </tbody>

@@ -12,6 +12,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 // Get user data
 $full_name = $_SESSION['full_name'];
 
+$emp_filter = isset($_GET['emp_filter']) ? $_GET['emp_filter'] : 'semua';
+if (!in_array($emp_filter, ['semua', 'aktif', 'non_aktif'], true)) {
+    $emp_filter = 'semua';
+}
+$emp_where = '';
+if ($emp_filter === 'aktif') {
+    $emp_where = " AND (a.employment_status IS NULL OR a.employment_status = 'aktif')";
+} elseif ($emp_filter === 'non_aktif') {
+    $emp_where = " AND a.employment_status = 'non_aktif'";
+}
+
 // Query for employee data
 $query = "SELECT 
     a.application_id,
@@ -21,13 +32,15 @@ $query = "SELECT
     j.nama_jenjang,
     jr.nama_jurusan,
     l.title as posisi,
-    a.start_date
+    a.start_date,
+    a.employment_status
 FROM applications a
 INNER JOIN users u ON a.user_id = u.user_id
 INNER JOIN lowongan l ON a.job_id = l.job_id
 LEFT JOIN jenjang_pendidikan j ON a.id_jenjang_pendidikan = j.id_jenjang
 LEFT JOIN jurusan_pendidikan jr ON a.id_jurusan_pendidikan = jr.id_jurusan
 WHERE a.status = 'diterima bekerja'
+$emp_where
 ORDER BY a.start_date DESC";
 
 $result = mysqli_query($conn, $query);
@@ -118,12 +131,13 @@ $pdf->SetFont('Arial', 'B', 9);
 $pdf->SetFillColor(37, 99, 235);
 $pdf->SetTextColor(255, 255, 255);
 
-$pdf->Cell(10, 8, 'No', 1, 0, 'C', true);
-$pdf->Cell(40, 8, 'Nama Lengkap', 1, 0, 'C', true);
-$pdf->Cell(30, 8, 'No. Telepon', 1, 0, 'C', true);
-$pdf->Cell(25, 8, 'Pendidikan', 1, 0, 'C', true);
-$pdf->Cell(45, 8, 'Jurusan', 1, 0, 'C', true);
-$pdf->Cell(30, 8, 'Posisi', 1, 1, 'C', true);
+$pdf->Cell(8, 8, 'No', 1, 0, 'C', true);
+$pdf->Cell(36, 8, 'Nama Lengkap', 1, 0, 'C', true);
+$pdf->Cell(26, 8, 'Telepon', 1, 0, 'C', true);
+$pdf->Cell(22, 8, 'Pendidikan', 1, 0, 'C', true);
+$pdf->Cell(38, 8, 'Jurusan', 1, 0, 'C', true);
+$pdf->Cell(28, 8, 'Posisi', 1, 0, 'C', true);
+$pdf->Cell(22, 8, 'Status', 1, 1, 'C', true);
 
 // Table data
 $pdf->SetFont('Arial', '', 8);
@@ -133,13 +147,16 @@ $no = 1;
 while ($row = mysqli_fetch_assoc($result)) {
     $pendidikan = $row['nama_jenjang'] ?? '-';
     $jurusan = $row['nama_jurusan'] ?? '-';
+    $es = $row['employment_status'] ?? null;
+    $status_label = ($es === 'non_aktif') ? 'Non-aktif' : 'Aktif';
 
-    $pdf->Cell(10, 8, $no++, 1, 0, 'C');
-    $pdf->Cell(40, 8, $row['full_name'], 1, 0);
-    $pdf->Cell(30, 8, $row['no_telepon'] ?? '-', 1, 0, 'C');
-    $pdf->Cell(25, 8, $pendidikan, 1, 0, 'C');
-    $pdf->Cell(45, 8, $jurusan, 1, 0);
-    $pdf->Cell(30, 8, $row['posisi'], 1, 1);
+    $pdf->Cell(8, 8, $no++, 1, 0, 'C');
+    $pdf->Cell(36, 8, $row['full_name'], 1, 0);
+    $pdf->Cell(26, 8, $row['no_telepon'] ?? '-', 1, 0, 'C');
+    $pdf->Cell(22, 8, $pendidikan, 1, 0, 'C');
+    $pdf->Cell(38, 8, $jurusan, 1, 0);
+    $pdf->Cell(28, 8, $row['posisi'], 1, 0);
+    $pdf->Cell(22, 8, $status_label, 1, 1, 'C');
 }
 
 // Signature area

@@ -20,6 +20,90 @@
   margin: 0;
 }
 
+.emp-filter-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.emp-filter-form label {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.emp-filter-form select {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #1e293b;
+  background: #fff;
+  min-width: 160px;
+}
+
+.badge-emp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-emp-aktif {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.badge-emp-nonaktif {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.karyawan-table tbody tr.row-emp-nonaktif {
+  background: #fafafa;
+}
+
+.form-emp-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.select-emp-status {
+  padding: 6px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  max-width: 130px;
+}
+
+.btn-emp-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-emp-save:hover {
+  background: #1d4ed8;
+}
+
 .header-actions {
   display: flex;
   gap: 10px;
@@ -123,6 +207,15 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
+  }
+
+  .emp-filter-form {
+    width: 100%;
+  }
+
+  .emp-filter-form select {
+    width: 100%;
+    max-width: 100%;
   }
 
   .header-actions {

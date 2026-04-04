@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_
         $reason = esc($conn, $_POST['reason']);
         $start_date = esc($conn, $_POST['start_date']);
         $new_status = 'diterima bekerja';
-        $q = "UPDATE applications SET status='$new_status', updated_at=NOW(), reason='$reason', start_date='$start_date' WHERE application_id=$application_id";
+        $q = "UPDATE applications SET status='$new_status', employment_status='aktif', updated_at=NOW(), reason='$reason', start_date='$start_date' WHERE application_id=$application_id";
         if (mysqli_query($conn, $q)) {
             $info = mysqli_query($conn, "SELECT a.*, u.email, u.full_name, l.title FROM applications a JOIN users u ON a.user_id=u.user_id JOIN lowongan l ON a.job_id=l.job_id WHERE a.application_id=$application_id");
             if ($info) {

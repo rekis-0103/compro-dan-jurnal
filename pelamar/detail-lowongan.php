@@ -37,18 +37,33 @@ $user_query = mysqli_query($conn, "SELECT u.*,
     WHERE u.user_id = $user_id");
 $user_profile = mysqli_fetch_assoc($user_query);
 
-// Check if user has any ACTIVE application
+// Lamaran masih berjalan (sama dengan pelamar/profile.php — termasuk 'menunggu')
+$active_status_sql = "'menunggu', 'pending', 'seleksi administrasi', 'lolos administrasi', 'tes & wawancara'";
+
 $activeApplicationQuery = mysqli_query($conn, "
     SELECT a.*, l.title 
     FROM applications a 
     JOIN lowongan l ON a.job_id = l.job_id 
     WHERE a.user_id = $user_id 
-    AND a.status IN ('pending', 'seleksi administrasi', 'lolos administrasi', 'tes & wawancara')
+    AND a.status IN ($active_status_sql)
     ORDER BY a.applied_at DESC 
     LIMIT 1
 ");
 $hasActiveApplication = mysqli_num_rows($activeApplicationQuery) > 0;
 $activeApplication = $hasActiveApplication ? mysqli_fetch_assoc($activeApplicationQuery) : null;
+
+$employedQuery = mysqli_query($conn, "
+    SELECT a.*, l.title 
+    FROM applications a 
+    JOIN lowongan l ON a.job_id = l.job_id 
+    WHERE a.user_id = $user_id 
+    AND a.status = 'diterima bekerja'
+    AND (a.employment_status IS NULL OR a.employment_status = 'aktif')
+    ORDER BY a.applied_at DESC 
+    LIMIT 1
+");
+$isEmployedActive = $employedQuery && mysqli_num_rows($employedQuery) > 0;
+$employedApplication = $isEmployedActive ? mysqli_fetch_assoc($employedQuery) : null;
 
 // Get job ID from URL
 $job_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -104,6 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     } elseif ($hasApplied) {
         $error = 'Anda sudah mengirim lamaran untuk lowongan ini sebelumnya.';
         logActivity($conn, $user_id, 'Gagal kirim lamaran (sudah apply)');
+    } elseif ($isEmployedActive) {
+        $error = 'Anda sudah terdaftar sebagai karyawan. Tidak dapat mengirim lamaran baru melalui sistem ini.';
+        logActivity($conn, $user_id, 'Gagal kirim lamaran (sudah karyawan aktif)');
     } elseif ($hasActiveApplication) {
         $error = 'Anda sudah memiliki lamaran yang sedang diproses. Harap tunggu hingga lamaran tersebut selesai (ditolak atau diterima) sebelum melamar pekerjaan lain.';
         logActivity($conn, $user_id, 'Gagal kirim lamaran (sudah ada lamaran aktif)');
@@ -445,7 +463,13 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
                                 </div>
                             </div>
                         <?php elseif ($job['status'] === 'open'): ?>
-                            <?php if ($hasActiveApplication && $activeApplication['job_id'] != $job_id): ?>
+                            <?php if ($isEmployedActive && !$hasApplied): ?>
+                                <div class="employed-block-notice">
+                                    <h4><i class="fas fa-lock"></i> Lowongan tidak tersedia</h4>
+                                    <p>Anda sudah <strong>diterima bekerja</strong> pada posisi <strong><?php echo htmlspecialchars($employedApplication['title']); ?></strong>. Data Anda telah masuk ke data karyawan; Anda tidak dapat melamar lowongan lain.</p>
+                                    <a href="applications.php" class="btn btn-primary"><i class="fas fa-file-alt"></i> Lamaran Saya</a>
+                                </div>
+                            <?php elseif ($hasActiveApplication && $activeApplication['job_id'] != $job_id): ?>
                                 <div class="active-warning">
                                     <h4>
                                         <i class="fas fa-exclamation-triangle"></i>
