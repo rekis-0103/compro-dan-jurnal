@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 04, 2026 at 08:52 AM
+-- Generation Time: Apr 07, 2026 at 01:25 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.29
 
@@ -53,8 +53,7 @@ INSERT INTO `applications` (`application_id`, `job_id`, `user_id`, `no_telepon`,
 (7, 3, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'ditolak tes & wawancara', 'gak tau', '2025-12-04 07:55:00', NULL, NULL, '2025-11-25 11:55:09', '2025-11-26 00:55:50'),
 (8, 3, 9, '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'lolos administrasi', 'oke kamu diterima di sini yh', NULL, NULL, NULL, '2025-11-26 00:47:55', '2025-11-27 11:40:49'),
 (9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', 'aktif', '2025-11-26 01:34:18', '2025-11-26 01:36:35'),
-(10, 4, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', '', '2026-02-27 10:11:00', '2026-02-27', 'aktif', '2026-02-26 03:09:54', '2026-02-26 03:12:15'),
-(17, 4, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'diterima bekerja', 'yeyyyyyyyyy', '2026-04-16 15:44:00', '2026-04-17', 'aktif', '2026-04-02 07:05:41', '2026-04-04 08:45:14');
+(17, 4, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'diterima bekerja', 'yeyyyyyyyyy', '2026-04-16 15:44:00', '2026-04-17', 'non_aktif', '2026-04-02 07:05:41', '2026-04-06 07:03:22');
 
 -- --------------------------------------------------------
 
@@ -892,7 +891,14 @@ INSERT INTO `log_aktivitas` (`log_id`, `user_id`, `action`, `log_time`) VALUES
 (616, 3, 'HRD: set interview application #17', '2026-04-04 08:45:02'),
 (617, 3, 'HRD: terima bekerja application #17 (Divisi Software)', '2026-04-04 08:45:16'),
 (618, 3, 'Logout', '2026-04-04 08:50:42'),
-(619, 10, 'Login', '2026-04-04 08:50:51');
+(619, 10, 'Login', '2026-04-04 08:50:51'),
+(620, 10, 'Login', '2026-04-06 01:29:09'),
+(621, 1, 'Login', '2026-04-06 07:03:10'),
+(622, 1, 'Admin: ubah status karyawan application #17 menjadi non_aktif', '2026-04-06 07:03:22'),
+(623, 1, 'Logout', '2026-04-06 07:03:27'),
+(624, 10, 'Login', '2026-04-06 07:03:40'),
+(625, 10, 'Logout', '2026-04-06 07:21:55'),
+(626, 10, 'Login', '2026-04-07 01:22:42');
 
 -- --------------------------------------------------------
 
@@ -1358,7 +1364,7 @@ ALTER TABLE `live_streaming`
 -- AUTO_INCREMENT for table `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=620;
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=627;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
