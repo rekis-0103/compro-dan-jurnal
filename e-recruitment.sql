@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 07, 2026 at 01:25 AM
+-- Generation Time: Apr 08, 2026 at 03:30 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.29
 
@@ -52,8 +52,7 @@ INSERT INTO `applications` (`application_id`, `job_id`, `user_id`, `no_telepon`,
 (6, 3, 2, '0812345678910', 3, 3, 'cv_2_1763881705.pdf', 'diterima bekerja', 'test', '2025-11-11 15:33:00', '2025-11-26', 'aktif', '2025-11-25 07:24:36', '2025-11-25 07:46:09'),
 (7, 3, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'ditolak tes & wawancara', 'gak tau', '2025-12-04 07:55:00', NULL, NULL, '2025-11-25 11:55:09', '2025-11-26 00:55:50'),
 (8, 3, 9, '0831279132789', 3, 3, 'cv_9_1764117960.pdf', 'lolos administrasi', 'oke kamu diterima di sini yh', NULL, NULL, NULL, '2025-11-26 00:47:55', '2025-11-27 11:40:49'),
-(9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', 'aktif', '2025-11-26 01:34:18', '2025-11-26 01:36:35'),
-(17, 4, 10, '08798465132', 3, 3, 'cv_10_1774931728.pdf', 'diterima bekerja', 'yeyyyyyyyyy', '2026-04-16 15:44:00', '2026-04-17', 'non_aktif', '2026-04-02 07:05:41', '2026-04-06 07:03:22');
+(9, 4, 8, '08131278923178', 3, 3, 'cv_8_1763985384.pdf', 'diterima bekerja', 'aa', '2025-11-27 08:35:00', '2025-11-28', 'aktif', '2025-11-26 01:34:18', '2025-11-26 01:36:35');
 
 -- --------------------------------------------------------
 
@@ -124,13 +123,6 @@ CREATE TABLE `hrd_notes` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `hrd_notes`
---
-
-INSERT INTO `hrd_notes` (`note_id`, `candidate_user_id`, `application_id`, `hrd_user_id`, `note`, `created_at`, `updated_at`) VALUES
-(3, 10, 17, 3, 'tes', '2026-04-02 07:10:02', NULL);
 
 -- --------------------------------------------------------
 
@@ -898,7 +890,9 @@ INSERT INTO `log_aktivitas` (`log_id`, `user_id`, `action`, `log_time`) VALUES
 (623, 1, 'Logout', '2026-04-06 07:03:27'),
 (624, 10, 'Login', '2026-04-06 07:03:40'),
 (625, 10, 'Logout', '2026-04-06 07:21:55'),
-(626, 10, 'Login', '2026-04-07 01:22:42');
+(626, 10, 'Login', '2026-04-07 01:22:42'),
+(627, 1, 'Login', '2026-04-08 01:09:53'),
+(628, 1, 'Logout', '2026-04-08 01:22:29');
 
 -- --------------------------------------------------------
 
@@ -1364,7 +1358,7 @@ ALTER TABLE `live_streaming`
 -- AUTO_INCREMENT for table `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=627;
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=629;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
